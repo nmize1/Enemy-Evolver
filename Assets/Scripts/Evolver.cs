@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class Evolver : MonoBehaviour
@@ -13,6 +14,10 @@ public class Evolver : MonoBehaviour
     public List<float> fitnesses;
 
     public GameObject enemyManager;
+    public GameObject wave;
+    public GameObject menu;
+    public GameObject winscreen;
+    int counter = 0;
 
     void Start()
     {
@@ -20,6 +25,7 @@ public class Evolver : MonoBehaviour
         {
           fitnesses.Add(0);
         }
+        wave.GetComponent<TMP_Text>().text = (counter.ToString("X"));
     }
 
     void getStats(String stats)
@@ -32,6 +38,9 @@ public class Evolver : MonoBehaviour
     public void Evolve()
     {
       Debug.Log("Evolving.");
+      menu.SetActive(false);
+      counter++;
+      wave.GetComponent<TMP_Text>().text = (counter.ToString("X"));
 
       UdpClient client = new UdpClient(5600);
       try
@@ -51,6 +60,7 @@ public class Evolver : MonoBehaviour
         }
         else
         {
+          winscreen.SetActive(true);
           // Trigger Gameover
         }
       }

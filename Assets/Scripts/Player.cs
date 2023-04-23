@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -12,7 +13,10 @@ public class Player : MonoBehaviour
 
     public GameObject gun;
     public GameObject bulletPrefab;
+    public GameObject slider;
+    public GameObject goscreen;
 
+    int maxhp; 
     float angleToRotate;
     Vector2 rotateDir;
     Rigidbody2D rb;
@@ -21,11 +25,13 @@ public class Player : MonoBehaviour
     void Start()
     {
       rb = GetComponent<Rigidbody2D>();
+      maxhp = hp;
     }
 
     // Update is called once per frame
     void Update()
     {
+      slider.GetComponent<Slider>().value = hp;
       angleToRotate = 0;
       if(Input.GetAxis("GVertical") != 0 || Input.GetAxis("GHorizontal") != 0)
       {
@@ -69,6 +75,7 @@ public class Player : MonoBehaviour
     void GameOver()
     {
       Destroy(this.gameObject);
+      goscreen.SetActive(true);
       //maybe play a cool explosion
       //open gameover screen
     }

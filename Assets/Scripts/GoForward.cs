@@ -32,7 +32,7 @@ public class GoForward : MonoBehaviour
             collision.gameObject.GetComponent<Enemy>().TakeDamage(damage);
         }
 
-        Debug.Log(collision.gameObject.name);
+        //Debug.Log(collision.gameObject.name);
         Destroy(this.gameObject);
     }
 }
