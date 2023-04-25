@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3129666547543832348}
   - component: {fileID: 1804218744365800700}
   - component: {fileID: 6218544572213085589}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5064584251791702773}
   - component: {fileID: 1263470711}
   - component: {fileID: 1263470712}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -130,11 +130,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133efd2ceca31914abecf4a4ce0679a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
-  speed: 10
-  damage: 20
+  hp: 10000
+  speed: 5
+  damage: 100
+  shotTimer: 0.3
+  justShot: 0
   gun: {fileID: 3513026790038967603}
   bulletPrefab: {fileID: 6936659469441408481, guid: a7d3d6e4c2a2cf2488282ce4beb2c679, type: 3}
+  slider: {fileID: 0}
+  goscreen: {fileID: 0}
 --- !u!50 &1263470711
 Rigidbody2D:
   serializedVersion: 4
@@ -218,9 +222,9 @@ GameObject:
   - component: {fileID: 4894327255753708094}
   - component: {fileID: 8842284187215195369}
   - component: {fileID: 894171305283696641}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
     {
       rb = GetComponent<Rigidbody2D>();
       player = GameObject.FindGameObjectWithTag("Player");
-      speed /= 10;
+      speed /= 5;
       startTime = Time.time;
     }
 

@@ -26,8 +26,6 @@ serverSocket = socket(AF_INET, SOCK_DGRAM) #
 serverSocket.bind(('localhost', 5500))
 print("Server ready.")
 
-
-
 fitnesses = queue.Queue()
 
 # Define the problem
@@ -57,14 +55,17 @@ def getGen(gen, address):
 
     serverSocket.sendto(ret.encode(), address)
 
-def Evolve(p_m=.01, p_c=.3, trn_size=2, csv_output="output.csv"):
+def Evolve(max_generation=5, p_m=.01, p_c=.3, trn_size=2, csv_output="output.csv"):
+    print("Max_gen: " + str(max_generation) + " p_m: " + str(p_m) + " p_c: " + str(p_c) + " trn_size: " + str(trn_size))
     # Evaluate initial population
-    max_generation = 5
     pop_size = 10
     parents = Individual.create_population(pop_size,
                                            initialize=create_binary_sequence(24),
                                            decoder=IdentityDecoder(),
                                            problem=EvolveStats())
+
+
+    parents = Individual.evaluate_population(parents)
 
     message, address = serverSocket.recvfrom(1024)
     message = message.decode()
@@ -77,7 +78,6 @@ def Evolve(p_m=.01, p_c=.3, trn_size=2, csv_output="output.csv"):
     for i in range(pop_size):
         fitnesses.put(fits[i])
 
-    parents = Individual.evaluate_population(parents)
 
 
     generation_counter = util.inc_generation()
@@ -107,10 +107,30 @@ def Evolve(p_m=.01, p_c=.3, trn_size=2, csv_output="output.csv"):
         fits = fitness.split(" ")
         for i in range(pop_size):
             fitnesses.put(fits[i])
-        
+
         generation_counter()  # increment to the next generation
 
-    out_f.close()
-    serverSocket.sendto("Game Over".encode(), address)
+    offspring = pipe(parents,
+                     ops.tournament_selection(k=trn_size),
+                     ops.clone,
+                     mutate_bitflip(probability=p_m),
+                     ops.uniform_crossover(p_xover=p_c),
+                     ops.evaluate,
+                     ops.pool(size=len(parents)),  # accumulate offspring
+                     probe.AttributesCSVProbe(stream=out_f, do_fitness=True, do_genome=True)
+                    )
 
-Evolve()
+    out_f.close()
+    print("Game Over!")
+
+print("Getting settings:")
+message, address = serverSocket.recvfrom(1024)
+max_gen = message.decode()
+message, address = serverSocket.recvfrom(1024)
+p_m = message.decode()
+message, address = serverSocket.recvfrom(1024)
+p_c = message.decode()
+message, address = serverSocket.recvfrom(1024)
+tourn = message.decode()
+
+Evolve(int(max_gen), float(p_m), float(p_c), int(tourn))
